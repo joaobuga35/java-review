@@ -1,11 +1,11 @@
-import java.util.ArrayList;
+
 import java.util.Scanner;
 
 import entities.Product;
 import services.ProductService;
 
-public class Main {
-    public static void Main(String[] args) throws Exception {
+public class App {
+    public static void main(String[] args) throws Exception {
 
         Scanner scanner = new Scanner(System.in);
         ProductService productService = new ProductService();
@@ -36,6 +36,11 @@ public class Main {
                     productService.getProducts();
                     break;
                 case 3:
+                    System.out.print("Enter product name to search: ");
+                    String searchName = scanner.nextLine();
+                    productService.searchByName(searchName);
+                    break;
+                case 4:
                     System.out.println("Exiting...");
                     break;
                 default:
