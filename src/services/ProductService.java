@@ -25,15 +25,22 @@ public class ProductService {
         }
     }
 
-    public Product searchByName(String name) {
+    public String searchByName(String name) {
         List<Product> productNames = products.stream()
                 .filter(product -> product.getName().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
 
+        System.out.println(productNames.size() + " product(s) found:");
+
         if (!productNames.isEmpty()) {
-            return productNames.get(0);
+            for (Product p : productNames) {
+                System.out.println(
+                        "Product Name: " + p.getName() + ", Price: $" + p.getPrice() + ", Quantity: "
+                                + p.getQuantity());
+            }
+            return "Product(s) found.";
         }
-        return null;
+        return "Product not found.";
     }
 
 }
