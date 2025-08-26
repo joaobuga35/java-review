@@ -27,11 +27,17 @@ public class ProductService {
     }
 
     public void changeQuantity(int id, int newQuantity) {
+        if (newQuantity < 0) {
+            throw new IllegalArgumentException("Quantity cannot be negative");
+        }
         Product product = searchById(id);
         product.setQuantity(newQuantity);
     }
 
     public void changePrice(int id, double newPrice) {
+        if (newPrice < 0) {
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
         Product product = searchById(id);
         product.setPrice(newPrice);
     }
