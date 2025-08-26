@@ -2,6 +2,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import entities.Product;
@@ -25,22 +26,39 @@ public class ProductService {
         }
     }
 
-    public String searchByName(String name) {
-        List<Product> productNames = products.stream()
+    public void changeQuantity(int id, int newQuantity) {
+        Product product = searchById(id);
+        product.setQuantity(newQuantity);
+    }
+
+    public void changePrice(int id, double newPrice) {
+        Product product = searchById(id);
+        product.setPrice(newPrice);
+    }
+
+    public List<Product> searchByName(String name) {
+        List<Product> results = products.stream()
                 .filter(product -> product.getName().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
 
-        System.out.println(productNames.size() + " product(s) found:");
-
-        if (!productNames.isEmpty()) {
-            for (Product p : productNames) {
-                System.out.println(
-                        "Product Name: " + p.getName() + ", Price: $" + p.getPrice() + ", Quantity: "
-                                + p.getQuantity());
-            }
-            return "Product(s) found.";
+        if (results.isEmpty()) {
+            throw new RuntimeException("No products found with name: " + name);
         }
-        return "Product not found.";
+
+        System.out.println(results);
+        return results;
+    }
+
+    public Product searchById(int id) {
+        Optional<Product> productOpt = products.stream()
+                .filter(product -> product.getId() == id)
+                .findFirst();
+
+        if (productOpt.isPresent()) {
+            return productOpt.get();
+        } else {
+            throw new RuntimeException("Product not found");
+        }
     }
 
 }
