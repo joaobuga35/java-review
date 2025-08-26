@@ -50,6 +50,8 @@ public class ProductService {
         if (results.isEmpty()) {
             throw new RuntimeException("No products found with name: " + name);
         }
+
+        System.out.println(results);
         return results;
     }
 
