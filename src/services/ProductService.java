@@ -1,6 +1,7 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,20 +10,20 @@ import entities.Product;
 
 public class ProductService {
 
-    private ArrayList<Product> products;
+    private HashMap<Integer, Product> products;
 
     public ProductService() {
-        this.products = new ArrayList<>();
+        this.products = new HashMap<>();
     }
 
     public void addProduct(Product product) {
-        products.add(product);
+        products.put(product.getId(), product);
     }
 
     public void getProducts() {
-        for (Product p : products) {
-            System.out.println(
-                    "Product Name: " + p.getName() + ", Price: $" + p.getPrice() + ", Quantity: " + p.getQuantity());
+        for (Integer key : products.keySet()) {
+            Product product = products.get(key);
+            System.out.println("ID: " + key + " - Object: " + product);
         }
     }
 
@@ -36,29 +37,66 @@ public class ProductService {
         product.setPrice(newPrice);
     }
 
-    public List<Product> searchByName(String name) {
-        List<Product> results = products.stream()
-                .filter(product -> product.getName().toLowerCase().contains(name.toLowerCase()))
-                .collect(Collectors.toList());
-
-        if (results.isEmpty()) {
-            throw new RuntimeException("No products found with name: " + name);
-        }
-
-        System.out.println(results);
-        return results;
-    }
-
     public Product searchById(int id) {
-        Optional<Product> productOpt = products.stream()
-                .filter(product -> product.getId() == id)
-                .findFirst();
-
-        if (productOpt.isPresent()) {
-            return productOpt.get();
+        Product product = products.get(id);
+        if (product != null) {
+            System.out.println("Product found: " + product);
+            return product;
         } else {
+            System.out.println("No product found with ID: " + id);
             throw new RuntimeException("Product not found");
         }
     }
+
+    public void searchByName(String name) {
+        boolean found = products.values().stream()
+                .filter(p -> p.getName().equalsIgnoreCase(name))
+                .peek(System.out::println)
+                .findAny()
+                .isPresent();
+
+        if (!found) {
+            System.out.println("Produto não encontrado!");
+        }
+
+    }
+
+    public void removeProduct(int id) {
+        if (products.containsKey(id)) {
+            products.remove(id);
+            System.out.println("Product with ID " + id + " removed.");
+        } else {
+            System.out.println("No product found with ID: " + id);
+            throw new RuntimeException("Product not found");
+        }
+    }
+
+    // Alternative implementation USING List
+
+    // public List<Product> searchByName(String name) {
+    // List<Product> results = products.stream()
+    // .filter(product ->
+    // product.getName().toLowerCase().contains(name.toLowerCase()))
+    // .collect(Collectors.toList());
+
+    // if (results.isEmpty()) {
+    // throw new RuntimeException("No products found with name: " + name);
+    // }
+
+    // System.out.println(results);
+    // return results;
+    // }
+
+    // public Product searchById(int id) {
+    // Optional<Product> productOpt = products.stream()
+    // .filter(product -> product.getId() == id)
+    // .findFirst();
+
+    // if (productOpt.isPresent()) {
+    // return productOpt.get();
+    // } else {
+    // throw new RuntimeException("Product not found");
+    // }
+    // }
 
 }
