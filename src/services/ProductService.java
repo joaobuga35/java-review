@@ -49,9 +49,15 @@ public class ProductService {
     }
 
     public void searchByName(String name) {
-        products.values().stream()
+        boolean found = products.values().stream()
                 .filter(p -> p.getName().equalsIgnoreCase(name))
-                .forEach(System.out::println);
+                .peek(System.out::println)
+                .findAny()
+                .isPresent();
+
+        if (!found) {
+            System.out.println("Produto não encontrado!");
+        }
 
     }
 
