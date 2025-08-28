@@ -70,7 +70,7 @@ public class App {
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
-        } while (option != 3);
+        } while (option != 7);
 
     }
 }
